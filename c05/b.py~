@@ -1,0 +1,9 @@
+import sys
+import configparser
+
+config=configparser.ConfigParser()
+config.read('test.cfg')
+a = config.items('default')
+print(a)
+v=config.getfloat('DEFAULT','JiShuL')
+print(v)
