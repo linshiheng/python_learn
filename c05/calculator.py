@@ -10,6 +10,7 @@ class Args(object):
     def __init__(self):
         try:
             opts = getopt(sys.argv[1:],'C:c:d:o:h',['help'])[0]
+            print(opts)
         except:
             print('Parameter Error')
             sys.exit()
@@ -21,39 +22,42 @@ class Args(object):
                 self.city = args['-C']            
             else:
                 self.city = 'DEFAULT'
-            print(self.city)
-            self.config_file = args['-c']
-            self.user_file = args['-d']
-            self.out_file = args['-o']
+        print(self.city)
+        self.config_file = args['-c']
+        self.user_file = args['-d']
+        self.out_file = args['-o']
             
 
 class Config(Args):
 
     def get_config(self):
         config_d = {}
+        
         if os.path.exists(self.config_file):
             config=configparser.ConfigParser()
             config.read(self.config_file)
             
             section = self.city.upper()
-            JishuL = config.getfloat(section,'jishul')
-            JishuH = config.getfloat(section,'jishuh')
+            JiShuL = config.getfloat(section,'jishul')
+            
+            JiShuH = config.getfloat(section,'jishuh')
             YangLao = config.getfloat(section,'yanglao')
             YiLiao = config.getfloat(section,'yiliao')
             ShiYe = config.getfloat(section,'shiye')
             GongShang = config.getfloat(section,'gongshang')
             GongJiJin = config.getfloat(section,'gongjijin')
             ShengYu = config.getfloat(section,'shengyu')
-            config_d['JiShuL'] = JishuL
-            config_d['JiShuH'] = JishuH
+            config_d['JiShuL'] = JiShuL
+            config_d['JiShuH'] = JiShuH
             config_d['YangLao'] = YangLao
             config_d['YiLiao'] = YiLiao
             config_d['ShiYe'] = ShiYe
             config_d['GongShang'] = GongShang
             config_d['GongJiJin'] = GongJiJin
             config_d['ShengYu'] = ShengYu
+            
             return config_d
-            print(config_d)
+            
         else:
             print('Parameter Error')
 
@@ -66,6 +70,7 @@ class UserData(Args):
         self.queue2 = Queue()
 
     def get_userdata(self):
+
         user_file = self.user_file
         if os.path.exists(user_file) == False:
             print('Parameter Error')
@@ -73,12 +78,12 @@ class UserData(Args):
         
         with open(user_file,'r') as f:
             for line in f:
-                
+            
                 gonghao = line.split(',')[0]
                 gongzi = line.split(',')[1]
                 user_data = {'gonghao':gonghao,'gongzi':gongzi}
                 self.queue1.put(user_data)
-        
+         
 
     def calculate(self):        
         config = Config().get_config()
@@ -94,7 +99,7 @@ class UserData(Args):
         while True:
             try:
                 user_data = self.queue1.get(timeout=1)
-        
+                print(user_data)       
                 gonghao = user_data['gonghao']
                 gongzi = int(user_data['gongzi'])
                 shebaolv = YangLao+YiLiao+ShiYe+GongShang+ShengYu+GongJiJin
