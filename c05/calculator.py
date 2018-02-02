@@ -20,16 +20,17 @@ class Args(object):
             if opt in ('-h','--help'):
                 print('Usage: calculator.py -C cityname -c configfile -d userdata -o resultdata')
                 sys.exit()
-            if opt in('-C'):
-                self.city = args['-C']            
+            if opt in ('-C',):
+                
+                city = args['-C']                         
             else:
-                self.city = 'DEFAULT'
+                
+                city = 'DEFAULT'
          
         self.config_file = args['-c']
         self.user_file = args['-d']
         self.out_file = args['-o']
-            
-
+        self.city = args['-C']
 class Config(Args):
 
     def get_config(self):
@@ -41,12 +42,14 @@ class Config(Args):
             
             section = self.city.upper()
             
+            
             if (section not in config.sections()) and (section != 'DEFAULT'):
-                print('Parameter Error1')
+                print('Parameter Error')
                 sys.exit()
             JiShuL = config.getfloat(section,'jishul')
             
             JiShuH = config.getfloat(section,'jishuh')
+            
             YangLao = config.getfloat(section,'yanglao')
             YiLiao = config.getfloat(section,'yiliao')
             ShiYe = config.getfloat(section,'shiye')
@@ -93,8 +96,8 @@ class UserData(Args):
 
     def calculate(self):        
         config = Config().get_config()
-        JiShuL = config['JiShuL']
-        JiShuH = config['JiShuH']
+        JiShuL = int(config['JiShuL'])
+        JiShuH = int(config['JiShuH'])
         YangLao = config['YangLao']
         YiLiao = config['YiLiao']
         ShiYe = config['ShiYe']
@@ -108,13 +111,17 @@ class UserData(Args):
                        
                 gonghao = user_data['gonghao']
                 gongzi = int(user_data['gongzi'])
+                
+
                 shebaolv = YangLao+YiLiao+ShiYe+GongShang+ShengYu+GongJiJin
+                
                 if gongzi < JiShuL:
                     shebao = JiShuL*shebaolv
                 elif gongzi >=JiShuL and gongzi <=JiShuH:
                     shebao = gongzi*shebaolv
                 else:
                     shebao = JiShuH*shebaolv
+                    
                 
                 n = gongzi-3500
                 if n<=0:
