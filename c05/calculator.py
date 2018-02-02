@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import sys, os, csv, configparser, time
+import sys, os, csv, configparser, datetime
 from getopt import getopt
 from multiprocessing import Process, Queue
 
@@ -15,6 +15,7 @@ class Args(object):
             print('Parameter Error')
             sys.exit()
         args = dict(opts)
+        
         for opt,arg in opts:
             if opt in ('-h','--help'):
                 print('Usage: calculator.py -C cityname -c configfile -d userdata -o resultdata')
@@ -23,7 +24,7 @@ class Args(object):
                 self.city = args['-C']            
             else:
                 self.city = 'DEFAULT'
-        
+         
         self.config_file = args['-c']
         self.user_file = args['-d']
         self.out_file = args['-o']
@@ -39,6 +40,10 @@ class Config(Args):
             config.read(self.config_file)
             
             section = self.city.upper()
+            
+            if (section not in config.sections()) and (section != 'DEFAULT'):
+                print('Parameter Error1')
+                sys.exit()
             JiShuL = config.getfloat(section,'jishul')
             
             JiShuH = config.getfloat(section,'jishuh')
@@ -142,7 +147,7 @@ class UserData(Args):
             
                 gongzi_f = gongzi-shebao-shui
                 
-                s_datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+                s_datetime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
                 gongzi_item = '{},{},{:.2f},{:.2f},{:.2f},{}'.format(gonghao,gongzi,shebao,shui,gongzi_f,s_datetime)
                 
