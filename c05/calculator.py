@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding:utf-8 -*-
 
-import sys, os, csv, configparser
+import sys, os, csv, configparser, time
 from getopt import getopt
 from multiprocessing import Process, Queue
 
@@ -10,7 +10,7 @@ class Args(object):
     def __init__(self):
         try:
             opts = getopt(sys.argv[1:],'C:c:d:o:h',['help'])[0]
-            print(opts)
+            
         except:
             print('Parameter Error')
             sys.exit()
@@ -18,11 +18,12 @@ class Args(object):
         for opt,arg in opts:
             if opt in ('-h','--help'):
                 print('Usage: calculator.py -C cityname -c configfile -d userdata -o resultdata')
+                sys.exit()
             if opt in('-C'):
                 self.city = args['-C']            
             else:
                 self.city = 'DEFAULT'
-        print(self.city)
+        
         self.config_file = args['-c']
         self.user_file = args['-d']
         self.out_file = args['-o']
@@ -83,7 +84,7 @@ class UserData(Args):
                 gongzi = line.split(',')[1]
                 user_data = {'gonghao':gonghao,'gongzi':gongzi}
                 self.queue1.put(user_data)
-         
+                
 
     def calculate(self):        
         config = Config().get_config()
@@ -95,11 +96,11 @@ class UserData(Args):
         GongShang = config['GongShang']
         GongJiJin = config['GongJiJin']
         ShengYu = config['ShengYu']
-
+        
         while True:
             try:
                 user_data = self.queue1.get(timeout=1)
-                print(user_data)       
+                       
                 gonghao = user_data['gonghao']
                 gongzi = int(user_data['gongzi'])
                 shebaolv = YangLao+YiLiao+ShiYe+GongShang+ShengYu+GongJiJin
@@ -109,7 +110,7 @@ class UserData(Args):
                     shebao = gongzi*shebaolv
                 else:
                     shebao = JiShuH*shebaolv
-            
+                
                 n = gongzi-3500
                 if n<=0:
                     rate = 0
@@ -140,10 +141,15 @@ class UserData(Args):
                     shui = 0
             
                 gongzi_f = gongzi-shebao-shui
+                
                 s_datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+
                 gongzi_item = '{},{},{:.2f},{:.2f},{:.2f},{}'.format(gonghao,gongzi,shebao,shui,gongzi_f,s_datetime)
+                
                 self.queue2.put(gongzi_item)
+
             except:
+                
                 break
         
             
@@ -151,7 +157,7 @@ class UserData(Args):
         while True:
             try:
                 gongzi_item = self.queue2.get(timeout=1)
-                print(gongzi_item)
+                
                 with open(self.out_file, 'a') as f:
                      f.write(gongzi_item+os.linesep)
             except:
