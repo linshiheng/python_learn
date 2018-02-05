@@ -5,13 +5,13 @@ from flask import Flask, render_template, abort
 
 app = Flask(__name__)
 
-#files_path = '/home/shiyanlou/file'
-files_path = 'i:\\code\\python_learn\\c06\\files\\'
+files_path = '/home/shiyanlou/files'
+#files_path = 'i:\\code\\python_learn\\c06\\files\\'
 
 
 @app.route('/')
 def index():
-    #files_path = '/home/shiyanlou/file'
+    
     files = []
 
     for (dirpath, dirnames, filenames) in os.walk(files_path):
@@ -31,7 +31,8 @@ def index():
 
 @app.route('/files/<filename>')
 def file(filename):
-    file = files_path + filename + '.json'
+    file = files_path + '/'+filename + '.json'
+    
     if os.path.exists(file):
         with open(file, 'r') as f:
             post = json.load(f)
