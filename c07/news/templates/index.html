@@ -7,7 +7,8 @@
   <body>
     <ul>
         {% for file in file_list %}
-          <li><a href=#>{{ file }}</a></li>
+
+          <p><a href="/files/{{ file.id }}">{{ file.title }}</a></p>
         {% endfor  %}
     </ul>
   <body>

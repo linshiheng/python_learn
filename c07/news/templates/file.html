@@ -4,9 +4,11 @@
     <title>File</title>
   </head>
   <body>
-    <h1>{{post.title}}</h1>
+    <h1>Title: {{file.title}}</h1>
+    <p>Created Time: {{ file.created_time }}</p>
+    <p>Category: {{ file.category.name }}</p>
     <div>
-      {{post.content}}
+      {{ file.content }}
     </div>
   </body>
 </html>
