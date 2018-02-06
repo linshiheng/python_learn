@@ -7,8 +7,8 @@ from flask_script import Manager
 
 app = Flask(__name__)
 manager = Manager(app)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/mydb'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/mydb'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////tmp/test.db'
 
 db = SQLAlchemy(app)
 
@@ -64,4 +64,4 @@ def page_not_found(error):
 
 
 if __name__ == '__main__':
-    app.run()
+    manager.run()
