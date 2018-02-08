@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+  {% block main %}
+
+  <body>
+    <ul>
+        {% for file in file_list %}
+
+          <h1><a href="/files/{{ file.id }}">{{ file.title }}</a></h1>
+          <p>
+            {% for tag in file.tags %}
+            {{ tag }}
+            {% endfor %}
+          </p>
+
+        {% endfor  %}
+    </ul>
+  {% endblock %}
