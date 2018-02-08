@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>File</title>
+  </head>
+  <body>
+    <h1>Title: {{file.title}}</h1>
+    <p>Tags: 
+      <ul>
+          {% for tag in tags %}
+          {{ tag }}
+          {% endfor %}
+      </ul>
+    </p>
+    <p>Created Time: {{ file.created_time }}</p>
+    <p>Category: {{ file.category.name }}</p>
+    <div>
+      {{ file.content }}
+    </div>
+  </body>
+</html>

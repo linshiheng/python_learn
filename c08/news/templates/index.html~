@@ -1,0 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Post List</title>
+  <head>
+
+  <body>
+    <ul>
+        {% for file in file_list %}
+
+          <h1><a href="/files/{{ file.id }}">{{ file.title }}</a></h1>
+          <p>{{ file.tags }}</p>
+
+        {% endfor  %}
+    </ul>
+  <body>
+</html>
